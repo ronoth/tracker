@@ -16,8 +16,16 @@ jobs:
         include:
           - environment: vehicle
             name: heltec3-tracker
+            kind: esp32
           - environment: vehicle_v4
             name: heltec4-tracker
+            kind: esp32
+          - environment: ground_station
+            name: groundstation
+            kind: esp32
+          - environment: ground_wio
+            name: groundstation-wio
+            kind: nrf52
     steps:
       - uses: actions/checkout@v4
 
@@ -43,11 +51,22 @@ jobs:
 
       # .bin is the app image (flash at 0x10000); .hex carries that offset in
       # its records so hex-aware tools flash it to the right place
-      - name: Package firmware
+      - name: Package firmware (ESP32)
+        if: matrix.kind == 'esp32'
         run: |
           mkdir -p artifacts
           cp .pio/build/${{ matrix.environment }}/firmware.bin artifacts/${{ matrix.name }}.bin
           python -c "from intelhex import IntelHex; ih = IntelHex(); ih.loadbin('.pio/build/${{ matrix.environment }}/firmware.bin', offset=0x10000); ih.write_hex_file('artifacts/${{ matrix.name }}.hex')"
+
+      # nRF52 builds emit .hex natively and .uf2 via uf2_build.py; derive the
+      # raw .bin from the hex (starts at the app base above the SoftDevice)
+      - name: Package firmware (nRF52)
+        if: matrix.kind == 'nrf52'
+        run: |
+          mkdir -p artifacts
+          cp .pio/build/${{ matrix.environment }}/firmware.hex artifacts/${{ matrix.name }}.hex
+          cp .pio/build/${{ matrix.environment }}/firmware.uf2 artifacts/${{ matrix.name }}.uf2
+          python -c "from intelhex import IntelHex; IntelHex('.pio/build/${{ matrix.environment }}/firmware.hex').tobinfile('artifacts/${{ matrix.name }}.bin')"
 
       - name: Upload .bin
         uses: actions/upload-artifact@v4
@@ -60,6 +79,13 @@ jobs:
         with:
           name: ${{ matrix.name }}.hex
           path: artifacts/${{ matrix.name }}.hex
+
+      - name: Upload .uf2
+        if: matrix.kind == 'nrf52'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}.uf2
+          path: artifacts/${{ matrix.name }}.uf2
 
   # Tag pushes (v*) publish the firmware as raw release assets — unlike CI
   # artifacts, these download as plain .bin/.hex files, not zips
