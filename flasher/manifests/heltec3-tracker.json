@@ -1,0 +1,12 @@
+{
+  "name": "Ronoth Tracker (Heltec V3)",
+  "version": "dev",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        { "path": "../firmware/heltec3-tracker-factory.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

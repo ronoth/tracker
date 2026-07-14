@@ -1,4 +1,4 @@
-# Rocket Telemetry System
+# Rocket Tracker / Telemetry System
 
 A rocket flight computer and ground station telemetry system built on ESP32 with LoRa communication.
 
@@ -9,13 +9,23 @@ This project implements a complete rocket telemetry solution with two main compo
 - **Vehicle Firmware**: Collects GPS, temperature, pressure, and accelerometer data at 26Hz, transmits GPS location via LoRa, logs full sensor data to SD card, and displays system status on OLED
 - **Ground Station**: Receives GPS telemetry over LoRa, displays location on OLED, and provides WiFi web interface for iPhone/mobile Maps integration
 
-## Hardware Requirements
+## Hardware Support
 
-- **Board**: Heltec WiFi LoRa 32 V3 (ESP32-S3)
+### Tracker
+
+Currently supports Heltec LoRa 32 V3 or V4 (ESP32-S3)
+
 - **Sensors**: GPS module, LSM6DS33 IMU, MPL3115A2 barometer
 - **Communication**: SX1262 LoRa radio (915MHz)
 - **Display**: SSD1306 OLED (128x64)
 - **Storage**: SD card for data logging
+
+### Ground Station
+
+Any of the below boards will work.  No additional sensors, or GPS are required.  There are also a lot of 3D printed case options.
+
+- Heltec WiFi LoRa 32 V3 or V4 (ESP32-S3)
+- Wio Tracker L1 E-Ink
 
 ## Quick Start
 
@@ -71,15 +81,6 @@ pio run -e oled -t upload         # OLED display test
 pio run -e sd -t upload           # SD card performance test
 pio run -e i2c -t upload          # I2C device scanner
 ```
-
-### Pin Configuration
-
-See `src/board.h` for complete pin definitions:
-- **I2C Sensors**: SDA=6, SCL=5
-- **I2C OLED**: SDA=17, SCL=18  
-- **GPS**: RX=48, TX=47
-- **LoRa**: NSS=8, SCK=9, MOSI=10, MISO=11
-- **SD Card**: CS=3, MOSI=4, MISO=40, CLK=39
 
 ## System Architecture
 

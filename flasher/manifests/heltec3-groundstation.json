@@ -1,0 +1,12 @@
+{
+  "name": "Ronoth Ground Station (Heltec V3)",
+  "version": "dev",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        { "path": "../firmware/heltec3-groundstation-factory.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
