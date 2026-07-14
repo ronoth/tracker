@@ -27,7 +27,7 @@ jobs:
             name: heltec4-groundstation
             kind: esp32
           - environment: ground_wio
-            name: groundstation-wio
+            name: wio-eink-groundstation
             kind: nrf52
     steps:
       - uses: actions/checkout@v7
