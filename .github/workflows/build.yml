@@ -12,7 +12,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [vehicle, vehicle_v4]
+        include:
+          - environment: vehicle
+            name: heltec3-tracker
+          - environment: vehicle_v4
+            name: heltec4-tracker
     steps:
       - uses: actions/checkout@v4
 
@@ -31,15 +35,21 @@ jobs:
             pio-${{ runner.os }}-${{ matrix.environment }}-
 
       - name: Install PlatformIO
-        run: pip install platformio
+        run: pip install platformio intelhex
 
       - name: Build ${{ matrix.environment }}
         run: pio run -e ${{ matrix.environment }}
 
+      # .bin is the app image (flash at 0x10000); .hex carries that offset in
+      # its records so hex-aware tools flash it to the right place
+      - name: Package firmware
+        run: |
+          mkdir -p artifacts
+          cp .pio/build/${{ matrix.environment }}/firmware.bin artifacts/${{ matrix.name }}.bin
+          python -c "from intelhex import IntelHex; ih = IntelHex(); ih.loadbin('.pio/build/${{ matrix.environment }}/firmware.bin', offset=0x10000); ih.write_hex_file('artifacts/${{ matrix.name }}.hex')"
+
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.environment }}-firmware
-          path: |
-            .pio/build/${{ matrix.environment }}/firmware.bin
-            .pio/build/${{ matrix.environment }}/firmware.elf
+          name: ${{ matrix.name }}
+          path: artifacts/
