@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+// Rocket error codes
+enum RocketError {
+  NONE = 0;
+  UNKNOWN = 999;
+
+  SD_INIT_ERROR = 9;
+  GPS_INIT_ERROR = 10;
+  ACCEL_INIT_ERROR = 11;
+  GYRO_INIT_ERROR = 12;
+  MAG_INIT_ERROR = 13;
+  BARO_INIT_ERROR = 14;
+  BATTERY_INIT_ERROR = 15;
+
+
+  BATTERY_VOLTAGE_LOW = 20;
+  
+}
+
+// Flight states (linear, forward-only progression)
+enum RocketState {
+  ERROR = 0;              // Unknown/fault state
+  INITIALIZING = 1;       // Hardware initialization
+  WAITING_ON_GPS = 2;     // Waiting for GPS fix
+
+  PAD_IDLE = 10;          // On pad, collecting baseline
+  ARMED = 11;             // Baseline captured, ready for launch
+
+  ASCENT = 22;            // Motor thrust detected
+  APOGEE = 25;            // Peak altitude (barometric reversal)
+  DESCENT = 41;           // Descending under chute
+  RECOVERY = 62;          // On ground, recovery telemetry only
+}
+
+// Flight events (detected and logged, no state transition)
+enum FlightEventType {
+  EVT_NONE             = 0;
+  EVT_IGNITION         = 1;
+  EVT_BURNOUT          = 2;
+  EVT_DROGUE_DEPLOY    = 3;
+  EVT_MAIN_DEPLOY      = 4;
+  EVT_TOUCHDOWN        = 5;
+  EVT_MACH_TRANSITION  = 6;
+  EVT_SUPERSONIC       = 7;  // Speed exceeds barometer reliability threshold
+}
+
+// Protocol Buffer definition for sensor data
+message SensorReading {
+  uint32 timestamp = 1;
+  uint32 sequence = 2;
+  uint32 device_id = 3;
+  RocketError error_code = 4;
+  RocketState rocket_state = 5;
+  FlightEventType flight_event = 25;
+
+  // Battery data
+  float battery_voltage = 6;
+  float battery_current = 7;
+
+  // Accelerometer data
+  float accel_x = 8;
+  float accel_y = 9;
+  float accel_z = 10;
+
+  // Gyroscope data
+  float gyro_x = 11;
+  float gyro_y = 12;
+  float gyro_z = 13;
+
+  // Magnetometer data
+  float mag_x = 14;
+  float mag_y = 15;
+  float mag_z = 16;
+
+  // GPS data
+  float gps_latitude = 17;
+  float gps_longitude = 18;
+  float gps_altitude = 19;
+  float gps_speed = 20;
+  int32 gps_satellites = 21;
+  float gps_hdop = 22;
+
+  // Barometer data
+  float baro_pressure = 23;
+  float baro_temperature = 24;
+}
+
+// We can add a container message for future expansion
+message SensorDataBatch {
+  repeated SensorReading readings = 1;
+}
