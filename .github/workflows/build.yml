@@ -21,7 +21,10 @@ jobs:
             name: heltec4-tracker
             kind: esp32
           - environment: ground_station
-            name: groundstation
+            name: heltec3-groundstation
+            kind: esp32
+          - environment: ground_station_v4
+            name: heltec4-groundstation
             kind: esp32
           - environment: ground_wio
             name: groundstation-wio

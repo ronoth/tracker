@@ -269,6 +269,17 @@ void initializeDisplay() {
 }
 
 void initializeLoRa() {
+#ifdef BOARD_V4
+    // V4 routes the SX1262 through a GC1109 front-end module; without these
+    // the FEM is unpowered and TX/RX are severely attenuated.
+    pinMode(FEM_POWER, OUTPUT);
+    digitalWrite(FEM_POWER, HIGH);
+    pinMode(FEM_CSD, OUTPUT);
+    digitalWrite(FEM_CSD, HIGH);
+    pinMode(FEM_CPS, OUTPUT);
+    digitalWrite(FEM_CPS, HIGH);
+#endif
+
     // Initialize LoRa SPI
     SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_NSS);
 
@@ -290,6 +301,11 @@ void initializeLoRa() {
         Serial.println(res);
         return;
     }
+
+#ifdef BOARD_V4
+    // FEM TX/RX path switching (CTX) is wired to SX1262 DIO2
+    radio.setDio2AsRfSwitch(true);
+#endif
 
     // Set interrupt handler
     radio.setDio1Action(setFlag);
