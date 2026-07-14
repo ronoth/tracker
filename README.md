@@ -29,6 +29,16 @@ Any of the below boards will work.  No additional sensors, or GPS are required. 
 
 ## Quick Start
 
+### Web Flasher (no toolchain required)
+
+Flash prebuilt release firmware straight from the browser at
+**[flash.ronoth.com/tracker](https://flash.ronoth.com/tracker/)** — pick your
+board, plug it in over USB, and install. Requires a Web Serial capable browser
+(Chrome or Edge on desktop) and works for all ESP32-S3 boards. The Wio Tracker
+L1 E-Ink is nRF52-based; download its `.uf2` from the
+[latest release](https://github.com/ronoth/tracker/releases/latest) instead
+(double-tap reset, then drag it onto the USB drive).
+
 ### Building and Uploading
 
 ```bash
