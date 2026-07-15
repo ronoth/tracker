@@ -5,6 +5,8 @@ A rocket flight computer and ground station telemetry system built on ESP32 with
 > **📱 Get the iOS app — [Ronoth Tracker on the App Store](https://apps.apple.com/us/app/ronoth-tracker/id6787474660)**
 > The companion mobile app connects to the ground station and displays live maps and telemetry data on your iPhone.
 
+![Ronoth Tracker](docs/rt1.jpg)
+
 ## Overview
 
 This project implements a complete rocket telemetry solution with two main components:
