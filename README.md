@@ -60,24 +60,6 @@ pio device monitor -b 115200
 **LoRa Transmission**: `GPS:lat,lon,alt,speed,sats,hdop`  
 **SD Card Logging**: `timestamp,lat,lon,alt,speed,sats,hdop,pressure,temp,accelX,accelY,accelZ,gyroX,gyroY,gyroZ`
 
-## Mobile Integration
-
-### WiFi Web Interface
-
-The ground station creates a WiFi hotspot for mobile device integration:
-
-1. **Connect to WiFi**: Join "RocketTracker" network (password: rocket123)
-2. **Open Browser**: Navigate to `192.168.4.1`
-3. **View Live GPS**: Real-time rocket coordinates with auto-refresh
-4. **Open in Maps**: Direct links to Apple Maps and Google Maps
-5. **Track Rocket**: Navigate to rocket location using phone's Maps app
-
-**Features**:
-- Auto-refreshing GPS coordinates every 3 seconds
-- Signal quality indicators (RSSI, SNR, data age)
-- Mobile-optimized responsive design
-- No app installation required
-
 ## Development
 
 ### Subsystem Testing
