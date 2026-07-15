@@ -76,21 +76,3 @@ pio run -e oled -t upload         # OLED display test
 pio run -e sd -t upload           # SD card performance test
 pio run -e i2c -t upload          # I2C device scanner
 ```
-
-## System Architecture
-
-### Vehicle Features
-- **Dual I2C Buses**: Sensors on primary bus, OLED on secondary bus for isolation
-- **Dual SPI Buses**: SD card on HSPI, LoRa on FSPI for no interference
-- **26Hz Data Logging**: High-speed sensor sampling with CSV format
-- **3-Second LoRa**: GPS transmission every 3 seconds for tracking
-- **Status Display**: OLED shows GPS fix, satellite count, system health
-
-### Ground Station Features  
-- **LoRa Reception**: Receives and parses GPS telemetry packets
-- **OLED Display**: Shows rocket location and signal quality
-- **WiFi Hotspot**: Creates "RocketTracker" access point
-- **Web Server**: Mobile-friendly interface with Maps integration
-- **Live Updates**: Real-time coordinate display with auto-refresh
-
-The modular design allows individual component testing before integration, with complete SPI/I2C bus isolation preventing hardware conflicts during operation.
